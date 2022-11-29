@@ -1,0 +1,18 @@
+{
+  "version": 100,
+  "password": "123",
+  "conf": {
+    "protocol": "mqtt",
+    "clientID": "a12L0etN0Og.test1|securemode=2,signmethod=hmacsha256,timestamp=1669191063529|",
+    "username": "test1&a12L0etN0Og",
+    "passwd":"7ab846dd7f231f20c69fcda2866a03550f7f0ba4b6858314fc2238348cda0ffd",
+    "url": "a12L0etN0Og.iot-as-mqtt.cn-shanghai.aliyuncs.com",
+    "port": "1883",
+    "keep_alive": 30,
+    "cleanSession": "0",
+    "subscribe": {"0": "/sys/a12L0etN0Og/test1/thing/event/property/post_reply"},
+    "publish": {"0": "/sys/a12L0etN0Og/test1/thing/event/property/post"},
+    "qos": "0",
+    "retain": "1"
+  }
+}
