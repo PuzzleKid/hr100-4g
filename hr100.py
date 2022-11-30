@@ -30,7 +30,8 @@ from usr.mqttIot import MqttIot
 from usr.logging import getLogger
 from usr.settings import settings
 from usr.settings import PROJECT_NAME, PROJECT_VERSION, DEVICE_FIRMWARE_NAME, DEVICE_FIRMWARE_VERSION
-
+from usr.sensor import Sensor
+import urandom
 import checkNet
 import utime
 from misc import Power
@@ -41,12 +42,13 @@ LED_G = Pin(Pin.GPIO33, Pin.OUT, Pin.PULL_DISABLE, 0)  # GPIO33配置成输出�
 
 log = getLogger(__name__)
 
-
+global mqtt_iot
 
 
 def cloud_init(data):
     protocol = data.get("protocol").lower()
     if protocol == "mqtt":
+        global mqtt_iot
         mqtt_iot = MqttIot(data.get("url", None),
                             int(data.get("qos", 0)),
                             int(data.get("port", 1883)),
@@ -59,6 +61,8 @@ def cloud_init(data):
                             data.get("subscribe")
                             )
         mqtt_iot.init(enforce=True)
+        return True
+        
         # mqtt_iot.addObserver(remote_sub)
         # remote_pub.add_cloud(mqtt_iot, cid)
         # self.__channel.cloud_object_dict[cid] = mqtt_iot
@@ -80,9 +84,15 @@ def run():
         Power.powerRestart()
     
     cloud_init(settings.current_settings.get("conf"))
+    global mqtt_iot
+    # sensor = Sensor()
 
-    while 1:
-        utime.sleep_ms(100)
+    while True:
+        # pressure, temperature = sensor.read_press_temp()
+        seed = urandom.random()
+        pressure, temperature = seed*10, seed*30
+        mqtt_iot.post_sensor_data(pressure, temperature)
+        utime.sleep(settings.current_settings.get("collectCycle"))
 
 
 if __name__ == "__main__":

@@ -16,7 +16,7 @@
 class UserConfig(object):
     version = 100
     password = ""
-
+    collectCycle = 10
     conf = {
             "protocol": "mqtt",
             "clientId": "a12L0etN0Og.HmtUZMK2KklLFidvpjTC|securemode=2,signmethod=hmacsha256,timestamp=1669169451646|",

@@ -29,7 +29,7 @@ import utime
 import _thread
 from umqtt import MQTTClient
 from usr.logging import getLogger
-
+from usr.settings import settings
 log = getLogger(__name__)
 
 class MqttIot():
@@ -69,19 +69,40 @@ class MqttIot():
             topic: topic info
             data: response dictionary info
         """
-        log.debug("topic: %s" % topic)
         topic = topic.decode()
-        log.debug("topic: %s" % topic)
-        log.debug("data: %s" % data)
         try:
             data = ujson.loads(data)
         except:
             pass
+        log.info("topic: %s, data: %s" % (topic, data))
+        if topic.endswith("/post_reply"):
+            pass
+        elif topic.endswith("/property/set"):
+            if data["method"] == "thing.service.property.set":
+                # if "Pressure" in data["params"]:
+                #     pressure = data["params"].get("Pressure")
+                #     log.info("set Pressure : %s" % pressure)
+                # if "Temperature" in data["params"]:
+                #     temperature = data["params"].get("Temperature")
+                #     log.info("set Temperature : %s" % temperature)
+                if "Interval" in data["params"]:
+                    interval = data["params"].get("Interval")
+                    log.info("set Interval : %s" % interval)
+                    settings.current_settings["collectCycle"] = interval
+                    
 
-        try:
-            self.notifyObservers(self, *("raw_data", {"topic":topic, "data":data} ) )
-        except Exception as e:
-            log.error("{}".format(e))
+        elif topic.startswith("/ota/device/upgrade/"):
+            pass
+            # print("subscribe /ota/device/upgrade/")
+            # self.__put_post_res(data["id"], True if int(data["code"]) == 1000 else False)
+            # if int(data["code"]) == 1000:
+            #     if data.get("data"):
+            #         self.__ota.set_ota_info(data["data"])
+            #         self.notifyObservers(self, *("object_model", [("ota_status", (data["data"]["module"], 1, data["data"]["version"]))]))
+            #         self.notifyObservers(self, *("ota_plain", [("ota_cfg", data["data"])]))
+        else:
+            log.warning("not match topic")
+
 
     def __listen(self):
         while True:
@@ -163,8 +184,21 @@ class MqttIot():
         else:
             return True
 
-    def post_data(self, data):
-        pass
+    def post_sensor_data(self, press, temp):
+        try:
+            # sensor_data = {"params":{"Pressure":press,"Temperature":temp}}
+            sensor_data = {"params": {"Pressure": 10.1, "Temperature": 50.4}}
+            log.info(sensor_data)
+            log.info(type(sensor_data))
+            data = ujson.dumps(sensor_data)
+            log.info(data)
+            log.info(type(data))            
+            self.__mqtt.publish(self.pub_topic_dict["0"], data, self.__qos)
+        except Exception:
+            log.error("mqtt publish topic %s failed. data: %s" % (self.pub_topic_dict["1"], data))
+            return False
+        else:
+            return True
 
     def ota_request(self):
         pass

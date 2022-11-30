@@ -1,17 +1,18 @@
 {
   "version": 100,
   "password": "123",
+  "collectCycle": 10,
   "conf": {
     "protocol": "mqtt",
-    "clientID": "a12L0etN0Og.test1|securemode=2,signmethod=hmacsha256,timestamp=1669191063529|",
-    "username": "test1&a12L0etN0Og",
-    "passwd":"7ab846dd7f231f20c69fcda2866a03550f7f0ba4b6858314fc2238348cda0ffd",
-    "url": "a12L0etN0Og.iot-as-mqtt.cn-shanghai.aliyuncs.com",
+    "clientID": "a1sqRqc98Vq.dev001|securemode=2,signmethod=hmacsha256,timestamp=1669797816312|",
+    "username": "dev001&a1sqRqc98Vq",
+    "passwd":"405efcb8a3b596358a9f5136feabcbe29042d0242ded5d995df383031faec5cc",
+    "url": "a1sqRqc98Vq.iot-as-mqtt.cn-shanghai.aliyuncs.com",
     "port": "1883",
     "keep_alive": 30,
     "cleanSession": "0",
-    "subscribe": {"0": "/sys/a12L0etN0Og/test1/thing/event/property/post_reply"},
-    "publish": {"0": "/sys/a12L0etN0Og/test1/thing/event/property/post"},
+    "subscribe": {"0": "/sys/a1sqRqc98Vq/dev001/thing/event/property/post_reply","1": "/sys/a1sqRqc98Vq/dev001/thing/config/push"},
+    "publish": {"0": "/sys/a1sqRqc98Vq/dev001/thing/event/property/post"},
     "qos": "0",
     "retain": "1"
   }
